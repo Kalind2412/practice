@@ -1,0 +1,77 @@
+﻿@model IEnumerable<ContosoUniversity.Models.Student>
+
+@{
+    ViewBag.Title = "Index";
+}
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@*@using (Html.BeginForm())
+{
+    *@<p>
+        Find by name: @Html.TextBox("SearchString", null, new { id="searchBox"})  
+        <input type="submit" value="Search" id="searchBtn" onclick="btnClick()"/></p>
+@*}*@
+<script type="text/javascript">  
+    function btnClick()
+    {
+        debugger;
+        event.preventDefault();
+        var employee = new Object();
+        employee.LastName = $('#searchBox').val();
+                //var searchString = $("#searchBox").val();
+                $.ajax({  
+                    type: "POST",  
+                    url: "/Student/Index",
+                  
+                    data: JSON.stringify(employee),
+                    dataType: "json",  
+                    contentType: 'application/text; charset=utf-8',  
+                    success: function(data) {  
+                        alert("success"+data.msg);  
+                    },  
+                    error: function(error) {  
+                        alert("faliure" + error);
+                    }  
+                }); 
+    };  
+</script>
+<table>
+     <tr>
+        <th>
+            @Html.ActionLink("Last Name", "Index", new { sortOrder = ViewBag.NameSortParm })
+        </th>
+        <th>First Name
+        </th>
+        <th>
+            @Html.ActionLink("Enrollment Date", "Index", new { sortOrder = ViewBag.DateSortParm })
+        </th>
+        <th></th>
+    </tr> 
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstMidName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EnrollmentDate)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.StudentID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.StudentID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.StudentID })
+        </td>
+    </tr>
+}
+
+</table>
